@@ -9,11 +9,11 @@ OUTPUT_PATH = os.path.join(BASE_PATH, "_output")
 config = {
     # how many posts to show in the index?
     "n_posts"       :   1,
-    "site_title"    :   "openmind",
+    "site_title"    :   "my blog",
     "editor"        :   shlex.split("vim -O -c 'set ft=markdown' +/^$ '+normal j'"),
     "meta_date_fmt" :   "%Y-%m-%d %H:%M:%S",
     #
-    "deploy_path"   :   "/srv/http/vhosts/blog.0x7be.org",
+    "deploy_path"   :   "/www",
     #
     # you probably won't have to change anything below this line
     #
