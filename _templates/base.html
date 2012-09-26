@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}{{ config.site_title }}{% endblock %}</title>
+  </head>
+  <body>
+    {% autoescape off %}
+      <header>
+        <h1><a href="/">Openmind</a></h1>
+      </header>
+      <section class="content">
+          {% block content %}{% endblock%}
+      </section>
+      <footer>
+          Powered by <a href="http://github.com/noah/stag">stag</a>.<br />
+      </footer>
+    {% endautoescape %}
+  </body>
+</html>
+
+{# :vim:ft=htmldjango: #}
