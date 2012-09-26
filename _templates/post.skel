@@ -1,0 +1,10 @@
+created:            {{ created }}
+edited:
+title:              {{ title }}
+slug:               {{ slug }}
+draft:              False
+tags:
+
+
+
+# vim: ft=markdown

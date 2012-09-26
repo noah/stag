@@ -1,0 +1,57 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import sys
+
+from lib.stag import Stag
+
+stag = Stag()
+
+options = {
+        'ls'        : {
+                        'description'   : "list posts",
+                        'callback'      : stag.ls,
+                        'args'          : []
+        },
+        'post'      : {
+                        'description'   : "edit new or existing post",
+                        'callback'      : stag.post,
+                        'args'          : ["post title"]
+        },
+        'gen'       : {
+                        'description'   : "generate the 'compiled' site",
+                        'callback'      : stag.gen,
+                        'args'          : []
+        },
+        'deploy'    : {
+                        'description'   : "deploy the site",
+                        'callback'      : stag.deploy,
+                        'args'          : []
+        }
+}
+
+
+def usage():
+    print("Options:")
+    for option in options.keys():
+        print("\t%s" % option, end="")
+        for arg in options[option]["args"]:
+            print(" <%s>" % arg, end="")
+        print(" - %s" % options[option]['description'])
+    sys.exit(-1)
+
+try:
+  cmd = sys.argv[1]
+except IndexError:
+  usage()
+
+if cmd not in options.keys():
+    print (("Command not understood: `%s`" % cmd), file=sys.stderr)
+    usage()
+
+if len(sys.argv)-2 != len(options[cmd]["args"]):
+    print (("Command `%s` requires %s arguments" % (cmd,
+      len(options[cmd]["args"]))), file=sys.stderr)
+    usage()
+
+options[cmd]['callback'](sys.argv[2:])
