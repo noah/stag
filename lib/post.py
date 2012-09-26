@@ -12,7 +12,7 @@ from django.template.defaultfilters import slugify
 import markdown
 
 from lib.config import config, OUTPUT_PATH
-from lib.utils import post_path, hash, write_template, flatten_meta
+from lib.utils import post_path, hash, write_template, flatten_meta, meta_date
 
 
 # This class uses the alternate constructor (aka factory) pattern
@@ -36,7 +36,7 @@ class Post(object):
 
     def __init__(self):
         self.now        = datetime.now()
-        # self.created    = meta_date(self.now)
+        self.created    = meta_date(self.now)
 
     # Create Post object from existing file
     @classmethod
