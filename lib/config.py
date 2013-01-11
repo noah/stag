@@ -36,6 +36,7 @@ OUTPUT_PATH = os.path.join(BASE_PATH, "_output")
 config = {
     # how many posts to show on the index page?
     "n_posts"       :   1,
+<<<<<<< HEAD
     "site_tagline"  :   SITE_TAGLINE,
     "site_title"    :   SITE_TITLE,
     "site_url"      :   SITE_URL,
