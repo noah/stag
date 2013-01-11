@@ -3,9 +3,11 @@
 from glob import glob
 from distutils.dir_util import copy_tree
 
+from django.utils.feedgenerator import Atom1Feed
+
 from lib.config import config, OUTPUT_PATH
 from lib.post import Post
-from lib.utils import write_template
+from lib.utils import write_template, feedify
 
 
 class Stag(object):
@@ -38,6 +40,11 @@ class Stag(object):
         with open(config["archive_path"], mode="w+b") as archive:
             print("Writing archive <%s>" % archive.name)
             write_template(archive, "archive.html", posts=posts)
+        print("Writing ATOM feed ...")
+        feed = Atom1Feed(**config["feed"])
+        [feed.add_item(**feedify(post).__dict__) for post in posts]
+        with open(config["feed"]["feed_url"], mode="w+b") as f:
+            f.write(bytes(feed.writeString("UTF-8"), "utf-8"))
         print("Copying assets ...")
         copy_tree(config["assets_path"], OUTPUT_PATH)
         print("Generation done.")

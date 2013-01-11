@@ -52,3 +52,16 @@ def flatten_meta(m):
         if len(m[k]) == 1:
             m[k] = v[0]
     return m
+
+
+def feedify(post):
+    # munge feed object into something django can work with
+    post.description    = ''.join([post.html[:250], "..."])
+    post.link           = '/'.join([config["site_url"], post.permalink])
+    post.author_name    = config["feed"]["author_name"]
+    post.author_email   = config["feed"]["author_email"]
+    post.pubdate        = post.created
+    if post.edited is not None:
+        post.pubdate = post.edited
+
+    return post

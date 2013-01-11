@@ -47,11 +47,16 @@ class Post(object):
         try:
             with open(self.path, 'r') as f:
                 # run post file through the markdown parser
-                mdown           = markdown.Markdown(extensions=["meta", "codehilite"])
-                self.html       = mdown.convert(f.read())
+                mdown           = markdown.Markdown(extensions=["meta",
+                    "codehilite(force_linenos=False)"])
+                self.text       = f.read()
+                self.html       = mdown.convert(self.text)
                 meta            = flatten_meta(mdown.Meta)
                 # s/self.meta.x/self.x/
                 for k, v in meta.items(): self.__dict__[k] = v
+
+                if(type(self.tags)) is str:
+                    self.tags = [self.tags]
 
                 # We now have the metadata from the post file, and some
                 # computed values from the filename: validate.
@@ -119,8 +124,12 @@ class Post(object):
             raise ValueError
 
         parse_date = lambda d: datetime.strptime(d,
-                                    config["meta_date_fmt"]).strftime(config["meta_date_fmt"])
+                                    config["meta_date_fmt"])#.strftime(config["meta_date_fmt"])
 
         self.created = parse_date(self.created)
-        if len(self.edited) > 0:
+
+        # not all posts are edited
+        try:
             self.edited = parse_date(self.edited)
+        except ValueError:
+            self.edited = None
