@@ -4,7 +4,7 @@
     <section class="archives">
         {% for p in posts %}
             <a href="{{ p.permalink }}">{{ p.title }}</a> (<span
-                class="tags">{{ p.tags | join:", " }}</span>)</br>
+                class="tags">{{ p.tags | join:", " }}</span>)<br/>
         {% endfor %}
     </section>
 {% endblock %}
