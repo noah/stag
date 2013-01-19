@@ -51,6 +51,7 @@ class Post(object):
                     "codehilite(force_linenos=False)"])
                 self.text       = f.read()
                 self.html       = mdown.convert(self.text)
+                self.wc         = len(self.html.split(None))
                 meta            = flatten_meta(mdown.Meta)
                 # s/self.meta.x/self.x/
                 for k, v in meta.items(): self.__dict__[k] = v
