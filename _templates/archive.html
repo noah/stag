@@ -3,8 +3,9 @@
 {% block content %}
     <section class="archives">
         {% for p in posts %}
-            <a href="{{ p.permalink }}">{{ p.title }}</a> (<span
-                class="tags">{{ p.tags | join:", " }}</span>)<br/>
+            <a href="{{ p.permalink }}">{{ p.title }}</a>
+            (<span id="post-tags">{{ p.tags | join:", " }}</span>; {{ p.wc }}
+            words)<br/>
         {% endfor %}
     </section>
 {% endblock %}

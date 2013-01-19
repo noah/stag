@@ -1,14 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% for p in recent_posts %}
-        <article>
-            <h2>{{ p.title }} <a href="{{ p.permalink }}">#</a></h2>
-            <h3>{{ p.created }}</h3>
-            {% if p.edited %}
-                <h3>edited at {{ p.edited }}</h3>
+    {% for post in recent_posts %}
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+            <h2 id="post-title">{{ post.title }} <a href="{{ post.permalink }}">♣</a></h2>
+            <h3 id="post-created">
+                {{ post.created|date:"D M j, Y" }}
+            </h3>
+            {% if post.edited %}
+                <h3 id="post-edited">edited at {{ post.edited }}</h3>
             {% endif %}
-            {{ p.html }}
+            <div id="post-content">
+                {{ post.html }}
+            </div>
         </article>
     {% endfor %}
 {% endblock %}
