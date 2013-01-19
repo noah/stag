@@ -5,7 +5,7 @@ import shlex
 
 # YOU REALLY SHOULD CHANGE SITE_* !
 
-SITE_TITLE              = "openmind blog"
+SITE_TITLE              = "openmind"
 SITE_TAGLINE            = "What was I thinking?"
 SITE_URL                = "https://blog.tilton.co"
 SITE_AUTHOR             = "Noah K. Tilton"
