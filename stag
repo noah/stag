@@ -16,7 +16,7 @@ options = {
         'post'      : {
                         'description'   : "edit new or existing post",
                         'callback'      : stag.post,
-                        'args'          : ["post title"]
+                        'args'          : ["new post title OR existing post slug(ish) glob pattern"]
         },
         'gen'       : {
                         'description'   : "generate the 'compiled' site",

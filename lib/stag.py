@@ -17,8 +17,13 @@ class Stag(object):
         try:
             with open(arg, 'r'):
                 post = Post.from_file(arg)
-        except IOError:
-            post = Post.from_title(arg)
+        except Exception as e:
+            #print(e)
+            try:
+                post = Post.from_slugish(arg)
+            except Exception as e:
+                #print(e)
+                post = Post.from_title(arg)
         return post
 
     # list posts

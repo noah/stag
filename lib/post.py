@@ -3,6 +3,7 @@
 import os
 import re
 import sys
+from glob import glob
 from datetime import datetime
 from shutil import copy
 from tempfile import NamedTemporaryFile
@@ -101,6 +102,21 @@ class Post(object):
                 else:
                     print("No changes made.")
         return post
+
+    # Create Post object from slug(ish) argument.  Can be a globbing
+    # pattern.
+    @classmethod
+    def from_slugish(klass, slugish):
+        self = klass()
+        for match in glob(os.path.join( config["posts_path"], slugish)):
+            self.path = match
+            try:
+                # post exists; edit it and return Post
+                with open(self.path, 'r'): pass
+                call(config["editor"] + [self.path])
+                post = Post.from_file(self.path)
+            except IOError:
+                pass
 
     def __str__(self):
         return "%s (%s)" % (self.now, self.slug)
