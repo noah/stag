@@ -40,6 +40,7 @@ So grab a six pack of `stag`.  Golden blogging quality since 2012.
 
     ⚡ ./stag
     Options:
+    init - initialize a new site
     post <post title> - edit new or existing post
     deploy - deploy the site
     ls - list posts
