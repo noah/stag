@@ -13,6 +13,11 @@ options = {
                         'callback'      : stag.ls,
                         'args'          : []
         },
+        'init'      : {
+                        'description'   : "initialize stag site",
+                        'callback'      : stag.init,
+                        'args'          : []
+        },
         'post'      : {
                         'description'   : "edit new or existing post",
                         'callback'      : stag.post,
@@ -41,15 +46,15 @@ def usage():
     sys.exit(-1)
 
 try:
-  cmd = sys.argv[1]
+    cmd = sys.argv[1]
 except IndexError:
-  usage()
+    usage()
 
 if cmd not in options.keys():
     print (("Command not understood: `%s`" % cmd), file=sys.stderr)
     usage()
 
-if len(sys.argv)-2 != len(options[cmd]["args"]):
+if (len(sys.argv) - 2) != len(options[cmd]["args"]):
     print (("Command `%s` requires %s arguments" % (cmd,
       len(options[cmd]["args"]))), file=sys.stderr)
     usage()

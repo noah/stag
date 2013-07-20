@@ -1,29 +1,43 @@
 # -*- coding: utf-8 -*-
 
+from shutil import copy2 as cp
+from os.path import join
 from glob import glob
 from distutils.dir_util import copy_tree
 
 from django.utils.feedgenerator import Atom1Feed
 
-from lib.config import config, OUTPUT_PATH
+from lib.config import config, BASE_PATH, OUTPUT_PATH, TEMPLATE_PATH, STAG_PATH
 from lib.post import Post
-from lib.utils import write_template, feedify
+from lib.utils import write_template, feedify, mkdir_p
 
 
 class Stag(object):
 
-    def post(self, argv):
-        arg = ' '.join(argv)
+    def init(self, argv):
+        mkdir_p(join( BASE_PATH, "_output"))
+        mkdir_p(join( BASE_PATH, "_posts"))
+        mkdir_p(join( BASE_PATH, "_assets"))
+        mkdir_p(join( BASE_PATH, "_templates"))
+        cp(join(STAG_PATH, "_templates", "index.html"), TEMPLATE_PATH)
+        cp(join(STAG_PATH, "_templates", "archive.html"), TEMPLATE_PATH)
+        cp(join(STAG_PATH, "_templates", "base.html"), TEMPLATE_PATH)
+        cp(join(STAG_PATH, "_templates", "post.html"), TEMPLATE_PATH)
+        cp(join(STAG_PATH, "_templates", "post.skel"), TEMPLATE_PATH)
+        cp(join(STAG_PATH, "stag.default.cfg"), join(BASE_PATH, "stag.cfg"))
+        open(join(TEMPLATE_PATH, "ga.js"), 'w')
+
+    def post(self, title, text=''):
+        arg = ' '.join(title)
         try:
             with open(arg, 'r'):
                 post = Post.from_file(arg)
-        except Exception as e:
-            #print(e)
+        except Exception:
             try:
                 post = Post.from_slugish(arg)
-            except Exception as e:
-                #print(e)
-                post = Post.from_title(arg)
+                assert post is not None
+            except Exception:
+                post = Post.from_title(arg, text)
         return post
 
     # list posts
@@ -61,6 +75,7 @@ class Stag(object):
 
     # deploy the site
     def deploy(self, args):
+        print(config["deploy_path"])
         self.gen([])
         print("Deploying ...")
         copy_tree(OUTPUT_PATH, config["deploy_path"])

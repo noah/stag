@@ -1,65 +1,69 @@
 # -*- coding: utf-8 -*-
 
-import os
+from os import getcwd
+from os.path import join
+from os.path import dirname
 import shlex
-
-# YOU REALLY SHOULD CHANGE SITE_* !
-
-SITE_TITLE              = "openmind"
-SITE_TAGLINE            = "What was I thinking?"
-SITE_URL                = "https://blog.tilton.co"
-SITE_AUTHOR             = "Noah K. Tilton"
-SITE_EMAIL              = "noah@tilton.co"
-SITE_DEPLOY_PATH        = "/srv/http/vhosts/blog.tilton.co"
-SITE_GOOGLE_ANALYTICS   = """
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-37603035-1']);
-    _gaq.push(['_setDomainName', 'tilton.co']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-     var ga = document.createElement('script'); ga.type =
-     'text/javascript'; ga.async = true;
-     ga.src = ('https:' == document.location.protocol ?
-       'https://ssl' : 'http://www') +
-     '.google-analytics.com/ga.js';
-     var s =
-     document.getElementsByTagName('script')[0];
-     s.parentNode.insertBefore(ga, s);
-     })();
-"""
 
 # IT PROBABLY WON'T BE NECESSARY TO CHANGE THE FOLLOWING
 
-BASE_PATH   = os.path.dirname(os.path.dirname(__file__))
-OUTPUT_PATH = os.path.join(BASE_PATH, "_output")
+STAG_PATH       = dirname(dirname(__file__))
+BASE_PATH       = getcwd()
+OUTPUT_PATH     = join(BASE_PATH, "_output")
+TEMPLATE_PATH   = join(BASE_PATH, "_templates")
+
+import configparser
+userconfig  = configparser.RawConfigParser()
+result      = userconfig.read(join(BASE_PATH, "stag.cfg"))
+
+DEPLOY_PATH = TAGLINE = TITLE = URL = AUTHOR = EMAIL = DISQUS_SHORTNAME = ''
+
+if result == []:
+    print("Please configure stag.cfg")
+else:
+    TAGLINE             = userconfig["stag"]["tagline"]
+    TITLE               = userconfig["stag"]["title"]
+    URL                 = userconfig["stag"]["url"]
+    AUTHOR              = userconfig["stag"]["author"]
+    EMAIL               = userconfig["stag"]["email"]
+    DEPLOY_PATH         = join( BASE_PATH, userconfig["stag"]["deploy_path"] )
+    DISQUS_SHORTNAME    = userconfig["stag"]["disqus_shortname"]
+
+print(DISQUS_SHORTNAME)
+
+try:
+    GOOGLE_ANALYTICS = open(join(TEMPLATE_PATH, "ga.js"), 'r').read()
+except:
+    GOOGLE_ANALYTICS = ''
 
 config = {
     # how many posts to show on the index page?
     "n_posts"       :   1,
-    "site_tagline"  :   SITE_TAGLINE,
-    "site_title"    :   SITE_TITLE,
-    "site_url"      :   SITE_URL,
+    "site_tagline"  :   TAGLINE,
+    "site_title"    :   TITLE,
+    "site_url"      :   URL,
     "editor"        :   shlex.split("vim -O -c 'set ft=markdown' +/^$ '+normal j'"),
     "meta_date_fmt" :   "%Y-%m-%d %H:%M:%S",
     #
-    "deploy_path"   :   SITE_DEPLOY_PATH,
-    "ga"            :   SITE_GOOGLE_ANALYTICS,
+    "deploy_path"   :   DEPLOY_PATH,
+    "ga"            :   GOOGLE_ANALYTICS,
     #
-    "posts_path"    :   os.path.join(BASE_PATH, "_posts"),
-    "template_path" :   os.path.join(BASE_PATH, "_templates"),
-    "assets_path"   :   os.path.join(BASE_PATH, "_assets"),
+    "posts_path"    :   join(BASE_PATH, "_posts"),
+    "template_path" :   TEMPLATE_PATH,
+    "assets_path"   :   join(BASE_PATH, "_assets"),
     #
-    "index_path"    :   os.path.join(OUTPUT_PATH, "index.html"),
-    "archive_path"  :   os.path.join(OUTPUT_PATH, "archive.html"),
+    "index_path"    :   join(OUTPUT_PATH, "index.html"),
+    "archive_path"  :   join(OUTPUT_PATH, "archive.html"),
+    "disqus_shortname" : DISQUS_SHORTNAME,
     #
     "feed"          : {
-        # SITE_ -> django.utils.feedgenerator.SyndicationFeed mappings
-        "title"         :   SITE_TITLE,
-        "link"          :   SITE_URL,
-        "description"   :   SITE_TAGLINE,
-        "author_name"   :   SITE_AUTHOR,
-        "author_email"  :   SITE_EMAIL,
-        "feed_url"      :   os.path.join(OUTPUT_PATH, SITE_TITLE + ".atom"),
+        # -> django.utils.feedgenerator.SyndicationFeed mappings
+        "title"         :   TITLE,
+        "link"          :   URL,
+        "description"   :   TAGLINE,
+        "author_name"   :   AUTHOR,
+        "author_email"  :   EMAIL,
+        "feed_url"      :   join(OUTPUT_PATH, TITLE + ".atom"),
         "language"      : "en",
     },
 }

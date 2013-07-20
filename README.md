@@ -32,6 +32,8 @@ So grab a six pack of `stag`.  Golden blogging quality since 2012.
     
     pip install pygments
 
+* edit the `site.cfg` file
+
 + usage
 
 *stag* is intended to be really simple to use:

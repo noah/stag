@@ -65,3 +65,15 @@ def feedify(post):
         post.pubdate = post.edited
 
     return post
+
+
+# http://stackoverflow.com/a/600612/67416
+import errno
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc:
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise

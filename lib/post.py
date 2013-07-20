@@ -74,15 +74,16 @@ class Post(object):
     # Create Post object from a given title (computed slug).  Create
     # file from template if necessary.
     @classmethod
-    def from_title(klass, title):
+    def from_title(klass, title, text=''):
         self        = klass()
         self.title  = title
+        self.text   = text
         self.slug   = slugify(self.title)
         self.path   = post_path(self.now, self.slug)
         post        = None
         try:
-            # post exists; edit it and return Post
             with open(self.path, 'r'): pass
+            # post exists; edit it and return Post
             call(config["editor"] + [self.path])
             post = Post.from_file(self.path)
         except IOError:
@@ -93,14 +94,22 @@ class Post(object):
             # return Post else return None
             with NamedTemporaryFile(suffix=".md", mode="w+b") as tempfile:
                 write_template(tempfile, 'post.skel', **self.__dict__)
-                before = hash(tempfile)
-                call(config["editor"] + [tempfile.name])
-                after = hash(tempfile)
-                if before != after:
-                    copy(tempfile.name, self.path)
-                    #post = Post.from_file(self.path)
+
+                if len(text) < 1: # text not set in client
+                    # editor path
+                    before = hash(tempfile)
+                    call(config["editor"] + [tempfile.name])
+                    after = hash(tempfile)
+                    if before != after:
+                        copy(tempfile.name, self.path)
+                        post = Post.from_file(self.path)
+                    else:
+                        print("No changes made.")
                 else:
-                    print("No changes made.")
+                    # client set text
+                    copy(tempfile.name, self.path)
+                    post = Post.from_file(self.path)
+                    call(config["editor"] + [self.path])
         return post
 
     # Create Post object from slug(ish) argument.  Can be a globbing
