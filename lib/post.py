@@ -49,7 +49,7 @@ class Post(object):
             with open(self.path, 'r') as f:
                 # run post file through the markdown parser
                 mdown           = markdown.Markdown(extensions=["meta",
-                    "codehilite(force_linenos=False)"])
+                    "codehilite(force_linenos=False)", "toc"])
                 self.text       = f.read()
                 self.html       = mdown.convert(self.text)
                 self.wc         = len(self.html.split(None))
