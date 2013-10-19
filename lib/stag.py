@@ -7,7 +7,7 @@ from distutils.dir_util import copy_tree
 
 from django.utils.feedgenerator import Atom1Feed
 
-from lib.config import config, BASE_PATH, OUTPUT_PATH, TEMPLATE_PATH, STAG_PATH
+from lib.config import config, BASE_PATH, OUTPUT_PATH, TEMPLATE_PATH, STAG_PATH, N_POSTS
 from lib.post import Post
 from lib.utils import write_template, feedify, mkdir_p
 
@@ -50,8 +50,8 @@ class Stag(object):
         # TODO generalize
         posts = self.posts()
         with open(config["index_path"], mode="w+b") as index:
-            print("Writing index <%s> ..." % index.name)
-            write_template(index, "index.html", recent_posts=posts[:config["n_posts"]])
+            print("Writing index <%s> (%s most recent posts) ..." % (index.name, N_POSTS))
+            write_template(index, "index.html", recent_posts=posts[:N_POSTS])
         print("Writing posts ...")
         for post in posts:
             with open(post.output_path, mode="w+b") as op:

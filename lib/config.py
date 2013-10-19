@@ -17,6 +17,7 @@ userconfig  = configparser.RawConfigParser()
 result      = userconfig.read(join(BASE_PATH, "stag.cfg"))
 
 DEPLOY_PATH = TAGLINE = TITLE = URL = AUTHOR = EMAIL = DISQUS_SHORTNAME = ''
+N_POSTS = 1
 
 if result == []:
     print("Please configure stag.cfg")
@@ -28,8 +29,8 @@ else:
     EMAIL               = userconfig["stag"]["email"]
     DEPLOY_PATH         = join( BASE_PATH, userconfig["stag"]["deploy_path"] )
     DISQUS_SHORTNAME    = userconfig["stag"]["disqus_shortname"]
+    N_POSTS             = int( userconfig["stag"]["n_posts"] )
 
-print(DISQUS_SHORTNAME)
 
 try:
     GOOGLE_ANALYTICS = open(join(TEMPLATE_PATH, "ga.js"), 'r').read()
@@ -37,8 +38,6 @@ except:
     GOOGLE_ANALYTICS = ''
 
 config = {
-    # how many posts to show on the index page?
-    "n_posts"       :   1,
     "site_tagline"  :   TAGLINE,
     "site_title"    :   TITLE,
     "site_url"      :   URL,
