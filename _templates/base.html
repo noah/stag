@@ -7,7 +7,7 @@
     <meta itemprop="description" content="{{ config.site_tagline }}">
     <link rel="stylesheet" href="css/site.css" />
     <link rel="stylesheet" href="css/code.css" />
-    <link rel="alternate" type="application/atom+xml" href="{{ config.site_title }}.atom" title="{{ config.site_title }} blog" />
+    <link rel="alternate" type="application/atom+xml" href="{{ config.site_title |lower }}.atom" title="{{ config.site_title }} blog" />
 
     <title>{% block title %}{{ config.site_title }}{% endblock %}</title>
     <!--ga-->
