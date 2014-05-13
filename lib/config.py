@@ -62,7 +62,7 @@ config = {
         "description"   :   TAGLINE,
         "author_name"   :   AUTHOR,
         "author_email"  :   EMAIL,
-        "feed_url"      :   join(OUTPUT_PATH, TITLE + ".atom"),
+        "feed_url"      :   join(OUTPUT_PATH, TITLE).lower() + ".atom",
         "language"      : "en",
     },
 }
