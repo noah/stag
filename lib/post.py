@@ -133,6 +133,10 @@ class Post(object):
     def validate(self):
         m = PATH_RE.match(os.path.basename(self.path))
 
+        if m is None:
+            print("invalid slug:", self.path, file=sys.stderr)
+            raise ValueError
+
         if None in m.group('year', 'month', 'day', 'slug'):
             print("verify that post file basename matches YYYY-MM-DD-slug.md",
                   self.path,
