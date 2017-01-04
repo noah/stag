@@ -60,7 +60,7 @@ class Post(object):
                 # s/self.meta.x/self.x/
                 for k, v in meta.items(): self.__dict__[k] = v
 
-                if(type(self.tags)) is str:
+                if type(self.tags) == unicode:
                     self.tags = [self.tags]
 
                 # We now have the metadata from the post file, and some

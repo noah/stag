@@ -1,24 +1,28 @@
 # -*- coding: utf-8 -*-
 
 import os
+import errno
 import hashlib
 from datetime import datetime
 
 from lib.config import config
 
-from django.template import Context, Template, loader
+from django.template import Context, Template
 from django.conf import settings
-settings.configure(TEMPLATE_DIRS=(config["template_path"],),
-                   DEBUG=False,
-                   TEMPLATE_DEBUG=False)
+from django import setup
 
-from lib.config import config
-
+settings.configure(
+    TEMPLATES = [{
+        'BACKEND'   : 'django.template.backends.django.DjangoTemplates',
+        'DIRS'      : [
+            config["template_path"],
+        ],
+    }])
+setup()
 
 def post_path(t, s):
     return '.'.join([os.path.join(config["posts_path"],
                         '-'.join([datetime.strftime(t, "%Y-%m-%d"), s])), 'md'])
-
 
 def meta_date(t):
     return datetime.strftime(t, config["meta_date_fmt"])
@@ -40,9 +44,8 @@ def eval_template(name, **kwargs):
 
 
 def write_template(fh, template, **data):
-    fh.write(bytes(eval_template(template, **data), 'utf-8'))
+    fh.write(eval_template(template, **data).encode('utf-8'))
     fh.flush()
-
 
 def flatten_meta(m):
     # Markdown.Meta is a dict of lists.  This is not desirable for
@@ -66,9 +69,7 @@ def feedify(post):
 
     return post
 
-
 # http://stackoverflow.com/a/600612/67416
-import errno
 def mkdir_p(path):
     try:
         os.makedirs(path)
