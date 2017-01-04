@@ -42,7 +42,9 @@ class Stag(object):
 
     # list posts
     def ls(self, args):
-        for post in self.posts():
+        posts = self.posts()
+        print("{} posts".format(len(posts)))
+        for post in posts:
             print(post)
 
     # generate the site
