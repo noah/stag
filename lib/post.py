@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 import os
 import re
 import sys
+import codecs
 from glob import glob
 from datetime import datetime
 from shutil import copy
@@ -46,10 +49,10 @@ class Post(object):
         # compute some attributes from the filename
         self.path   = path
         try:
-            with open(self.path, 'r') as f:
+            with codecs.open(self.path, 'r', 'utf-8') as f:
                 # run post file through the markdown parser
                 mdown           = markdown.Markdown(extensions=["meta",
-                    "codehilite(force_linenos=False)", "toc"])
+                    "codehilite(linenums=False)", "toc"])
                 self.text       = f.read()
                 self.html       = mdown.convert(self.text)
                 self.wc         = len(self.html.split(None))
@@ -82,7 +85,7 @@ class Post(object):
         self.path   = post_path(self.now, self.slug)
         post        = None
         try:
-            with open(self.path, 'r'): pass
+            with codecs.open(self.path, 'r', 'utf-8'): pass
             # post exists; edit it and return Post
             call(config["editor"] + [self.path])
             post = Post.from_file(self.path)
@@ -121,7 +124,7 @@ class Post(object):
             self.path = match
             try:
                 # post exists; edit it and return Post
-                with open(self.path, 'r'): pass
+                with codecs.open(self.path, 'r', 'utf-8'): pass
                 call(config["editor"] + [self.path])
                 post = Post.from_file(self.path)
             except IOError:
